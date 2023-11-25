@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Importer - Display</title>
+</head>
+<body>
+    <h1>CSV Importer - Display Page</h1>
+
+    {% if data %}
+        {% for document in data %}
+            <form >
+                {% for key, value in document.items() %}
+                    {% if key in ['name', 'rollno', 'gmail', 'phone'] %}
+                        <label for="{{ key }}">{{ key }}</label>
+                        <input type="text" name="{{ key }}" value="{{ value }}" readonly>
+                    {% endif %}
+                {% endfor %}
+           
+            </form>
+        {% endfor %}
+    {% endif %}
+    <form action="/success" method="post"></form>
+    <button type="submit">Continue</button>
+</body>
+</html>

@@ -21,7 +21,12 @@
             </form>
         {% endfor %}
     {% endif %}
-    <form action="/success" method="post"></form>
+    <form action="/display/{{ collection_name }}" method="post">
+        <button type="submit">Delete All</button>
+    </form>
+    
+    <form action="/success" method="post">
     <button type="submit">Continue</button>
+</form>
 </body>
 </html>

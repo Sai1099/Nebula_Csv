@@ -41,11 +41,17 @@ def upload():
 
 
 
-@ app.route('/display/<collection_name>')
+@ app.route('/display/<collection_name>', methods=['GET', 'POST'])
 def display(collection_name):
     collection = db[collection_name]
     data = list(collection.find())
-    return render_template('display.html', data=data)
+
+
+    if request.method == 'POST':
+        # Delete the entire collection from MongoDB
+        db.drop_collection(collection_name)
+        return redirect(url_for('upload_page'))
+    return render_template('display.html', data=data, collection_name=collection_name)
 
 
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from pymongo import MongoClient
 import csv
 import random
@@ -6,7 +6,7 @@ import string
 
 app = Flask(__name__)
 
-
+app.secret_key = '55bdf9cb64e6e6ffe47ab98654f77e4e'
 client = MongoClient('mongodb://localhost:27017/')
 db = client['csv_importer']
 
@@ -19,11 +19,13 @@ def upload_page():
 @ app.route('/upload', methods=['POST'])
 def upload():
     if 'file' not in request.files:
+        flash('No file part', 'error')
         return redirect(url_for('upload_page'))
 
     file = request.files['file']
 
     if file.filename == '':
+        flash('No selected file', 'error')
         return redirect(url_for('upload_page'))
 
    
@@ -35,7 +37,12 @@ def upload():
     for row in csv_data:
         collection.insert_one(row)
 
+    flash('File successfully uploaded', 'success')
+    session['collection_name'] = collection_name
+
     return redirect(url_for('display', collection_name=collection_name))
+
+    
 
 
 
@@ -43,6 +50,14 @@ def upload():
 
 @ app.route('/display/<collection_name>', methods=['GET', 'POST'])
 def display(collection_name):
+    
+    
+    collection_name = session.get('collection_name')
+
+    if not collection_name:
+        # Redirect to the upload page if the collection name is not found in the session
+        return redirect(url_for('upload_page'))
+
     collection = db[collection_name]
     data = list(collection.find())
 

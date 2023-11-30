@@ -6,8 +6,21 @@
     <title>CSV Importer - Display</title>
 </head>
 <body>
+    <script>
+        // Disable the back button (partially)
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
+        // Display a confirmation dialog if the user tries to leave
+        window.onbeforeunload = function () {
+            return 'Are you sure you want to leave? Your data may be lost.';
+        };
+    </script>
     <h1>CSV Importer - Display Page</h1>
+ 
 
+   
     {% if data %}
         {% for document in data %}
             <form >
@@ -17,8 +30,9 @@
                         <input type="text" name="{{ key }}" value="{{ value }}" readonly>
                     {% endif %}
                 {% endfor %}
-           
+               
             </form>
+         
         {% endfor %}
     {% endif %}
     <form action="/display/{{ collection_name }}" method="post">

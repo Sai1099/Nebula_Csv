@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_wtf import FlaskForm, RecaptchaField
+from wtforms import SubmitField
 from pymongo import MongoClient
 import csv
 import random
@@ -7,6 +9,12 @@ import string
 app = Flask(__name__)
 
 app.secret_key = '55bdf9cb64e6e6ffe47ab98654f77e4e'
+app.config['RECAPTCHA_PUBLIC_KEY'] = 'your_recaptcha_site_key'  # Replace with your reCAPTCHA site key
+app.config['RECAPTCHA_PRIVATE_KEY'] = 'your_recaptcha_secret_key'  # Replace with your reCAPTCHA secret key
+app.config['TESTING'] = False
+
+recaptcha = RecaptchaField()
+
 client = MongoClient('mongodb://localhost:27017/')
 db = client['csv_importer']
 

@@ -20,7 +20,7 @@
 
         function enableButtons() {
             // Enable buttons
-           // document.getElementById('submit_delete_all').disabled = false;
+             document.getElementById('submit_delete_all').disabled = false;
             document.getElementById('submit_continue').disabled = false;
         }
     </script>
@@ -47,7 +47,12 @@
         <button type="submit" id="submit_continue" disabled>Continue</button>
     </form>
     
-
+    <form action="/removed" method="post">
+        <label for="h-captcha">Complete hCaptcha to proceed:</label>
+        <div class="h-captcha" data-sitekey="6d28789a-a14d-4f89-8e27-a0b9d363fa86" data-callback="enableButtons"></div>
+        
+        <button type="submit"id="submit_delete_all" disabled>Delete All</button>
+    </form>
 </body>
 </html>
 

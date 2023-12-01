@@ -8,7 +8,6 @@ import string
 import hcaptcha
 
 app = Flask(__name__)
-
 app.secret_key = '55bdf9cb64e6e6ffe47ab98654f77e4e'
 app.config['HCAPTCHA_SECRET_KEY'] = 'ES_c8ae137714704200b37681d785cc9afb'
 app.config['HCAPTCHA_SITE_KEY'] = "6d28789a-a14d-4f89-8e27-a0b9d363fa86"  # Replace with your hCaptcha secret key
@@ -94,11 +93,14 @@ def verify_hcaptcha(response_token):
 def success():
     return render_template('success.html')
 
-@app.route('/removed/<collection_name>', methods=['GET', 'POST'])
-def removed(collection_name):
-    return render_template('removed.html', collection_name=collection_name)
-
-
+@app.route('/removed', methods=['GET', 'POST'])
+def removed():
+    if request.method == 'POST':
+        # Delete the entire collection from MongoDB
+        collection_name = session.get('collection_name')
+        db.drop_collection(collection_name)
+        flash('Collection deleted successfully!', 'success')
+    return render_template('removed.html', collection_name=session.get('collection_name'))
 
 if __name__ == '__main__':
     app.run(debug=True)
